@@ -1,15 +1,88 @@
 package com.dummy.myerp.model.bean.comptabilite;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.math.BigDecimal;
-
 import org.apache.commons.lang3.ObjectUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
-
-public class EcritureComptableTest {
-
-    private LigneEcritureComptable createLigne(Integer pCompteComptableNumero, String pDebit, String pCredit) {
+public class EcritureComptableTest
+{
+	EcritureComptable ecritueUnderTest;
+	
+	@BeforeEach
+	void setUp() throws Exception
+	{
+		ecritueUnderTest = new EcritureComptable();
+	}
+	
+	@AfterEach
+	void CleanUp()
+	{
+		ecritueUnderTest = null;
+	}
+	
+    /*
+     * RG_Compta_2
+     * Pour qu'une écriture comptable soit valide, elle doit être équilibrée :
+     * la somme des montants au crédit des lignes d'écriture doit être égale à la somme des montants au débit
+     */
+    @Test
+    public void isEquilibree_doitEtreEquilibree()
+    {
+    	// arrange  
+    	ecritueUnderTest.setLibelle("Equilibrée");
+    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, "200.50", null));
+    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, "100.50", "33"));
+    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(2, null, "301"));
+    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(2, "40", "7"));
+        
+        // act
+        boolean actualResult = ecritueUnderTest.isEquilibree();
+        
+        // assert
+        assertTrue(actualResult, ecritueUnderTest.toString());  
+    }
+    
+    @Test
+    public void isEquilibree_neDoitPasEtreEquilibree()
+    {
+    	// arrange
+    	ecritueUnderTest.setLibelle("Non équilibrée");
+    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, "10", null));
+    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, "20", "1"));
+    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(2, null, "30"));
+    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(2, "1", "2"));
+        
+        // act
+        boolean actualResult = ecritueUnderTest.isEquilibree();
+        
+        // assert
+        assertFalse(actualResult, ecritueUnderTest.toString());
+    }
+    
+    /*
+     * RG_Compta_3
+     * Une écriture comptable doit contenir au moins deux lignes d'écriture : une au débit et une au crédit
+     */
+    
+    /*
+     * RG_Compta_5
+     * La référence d'une écriture comptable est composée du code du journal dans lequel figure l'écriture suivi de l'année et
+     * d'un numéro de séquence (propre à chaque journal) sur 5 chiffres incrémenté automatiquement à chaque écriture
+     * Le formatage de la référence est : XX-AAAA/#####
+     * Ex : Journal de banque (BQ), écriture au 31/12/2016--> BQ-2016/00001
+     */
+    
+    /*
+     * RG_Compta_6
+     * La référence d'une écriture comptable doit être unique, il n'est pas possible de créer plusieurs écritures ayant la même référence
+     */
+    
+    private LigneEcritureComptable createLigne(Integer pCompteComptableNumero, String pDebit, String pCredit)
+    {
         BigDecimal vDebit = pDebit == null ? null : new BigDecimal(pDebit);
         BigDecimal vCredit = pCredit == null ? null : new BigDecimal(pCredit);
         String vLibelle = ObjectUtils.defaultIfNull(vDebit, BigDecimal.ZERO)
@@ -19,26 +92,4 @@ public class EcritureComptableTest {
                                                                     vDebit, vCredit);
         return vRetour;
     }
-
-    @Test
-    public void isEquilibree() {
-        EcritureComptable vEcriture;
-        vEcriture = new EcritureComptable();
-
-        vEcriture.setLibelle("Equilibrée");
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, "200.50", null));
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, "100.50", "33"));
-        vEcriture.getListLigneEcriture().add(this.createLigne(2, null, "301"));
-        vEcriture.getListLigneEcriture().add(this.createLigne(2, "40", "7"));
-        Assert.assertTrue(vEcriture.toString(), vEcriture.isEquilibree());
-
-        vEcriture.getListLigneEcriture().clear();
-        vEcriture.setLibelle("Non équilibrée");
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, "10", null));
-        vEcriture.getListLigneEcriture().add(this.createLigne(1, "20", "1"));
-        vEcriture.getListLigneEcriture().add(this.createLigne(2, null, "30"));
-        vEcriture.getListLigneEcriture().add(this.createLigne(2, "1", "2"));
-        Assert.assertFalse(vEcriture.toString(), vEcriture.isEquilibree());
-    }
-
 }
