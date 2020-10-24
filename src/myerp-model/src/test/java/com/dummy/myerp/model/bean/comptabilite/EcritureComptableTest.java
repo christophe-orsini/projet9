@@ -42,6 +42,22 @@ public class EcritureComptableTest
     	// assert
     	assertThat(actualResult).isEqualTo(new BigDecimal(301.05, new MathContext(5)));
 	}
+	
+	@Test
+	void getTotalCredit_sommeDeDeuxLignes()
+	{
+		// arrange
+		ecritueUnderTest.setLibelle("Débit");
+    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, null, "19.55"));
+    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, "100.50", "30"));
+    	
+    	// act
+    	BigDecimal actualResult = ecritueUnderTest.getTotalCredit();
+    	
+    	// assert
+    	assertThat(actualResult).isEqualTo(new BigDecimal(49.55, new MathContext(4)));
+	}
+	
     /*
      * RG_Compta_2
      * Pour qu'une écriture comptable soit valide, elle doit être équilibrée :
