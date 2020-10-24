@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 //import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
@@ -26,6 +28,20 @@ public class EcritureComptableTest
 		ecritueUnderTest = null;
 	}
 	
+	@Test
+	void getTotalDebit_sommeDeDeuxLignes()
+	{
+		// arrange
+		ecritueUnderTest.setLibelle("Débit");
+    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, "200.55", null));
+    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, "100.50", "33"));
+    	
+    	// act
+    	BigDecimal actualResult = ecritueUnderTest.getTotalDebit();
+    	
+    	// assert
+    	assertThat(actualResult).isEqualTo(new BigDecimal(301.05, new MathContext(5)));
+	}
     /*
      * RG_Compta_2
      * Pour qu'une écriture comptable soit valide, elle doit être équilibrée :
