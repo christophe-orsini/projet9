@@ -1,6 +1,8 @@
 package com.dummy.myerp.model.bean.comptabilite;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+//import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import org.apache.commons.lang3.ObjectUtils;
@@ -43,7 +45,7 @@ public class EcritureComptableTest
         boolean actualResult = ecritueUnderTest.isEquilibree();
         
         // assert
-        assertTrue(actualResult, ecritueUnderTest.toString());  
+        assertThat(actualResult).isTrue();
     }
     
     @Test
@@ -60,7 +62,7 @@ public class EcritureComptableTest
         boolean actualResult = ecritueUnderTest.isEquilibree();
         
         // assert
-        assertFalse(actualResult, ecritueUnderTest.toString());
+        assertThat(actualResult).isFalse();
     }
     
     /*
