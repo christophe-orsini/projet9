@@ -14,30 +14,30 @@ import org.junit.jupiter.api.BeforeEach;
 
 public class EcritureComptableTest
 {
-	EcritureComptable ecritueUnderTest;
+	EcritureComptable ecritureUnderTest;
 	
 	@BeforeEach
 	void setUp() throws Exception
 	{
-		ecritueUnderTest = new EcritureComptable();
+		ecritureUnderTest = new EcritureComptable();
 	}
 	
 	@AfterEach
 	void CleanUp()
 	{
-		ecritueUnderTest = null;
+		ecritureUnderTest = null;
 	}
 	
 	@Test
 	void getTotalDebit_sommeDeDeuxLignes()
 	{
 		// arrange
-		ecritueUnderTest.setLibelle("Débit");
-    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, "200.55", null));
-    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, "100.50", "33"));
+		ecritureUnderTest.setLibelle("Débit");
+    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(1, "200.55", null));
+    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(1, "100.50", "33"));
     	
     	// act
-    	BigDecimal actualResult = ecritueUnderTest.getTotalDebit();
+    	BigDecimal actualResult = ecritureUnderTest.getTotalDebit();
     	
     	// assert
     	assertThat(actualResult).isEqualTo(new BigDecimal(301.05, new MathContext(5)));
@@ -47,12 +47,12 @@ public class EcritureComptableTest
 	void getTotalCredit_sommeDeDeuxLignes()
 	{
 		// arrange
-		ecritueUnderTest.setLibelle("Débit");
-    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, null, "19.55"));
-    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, "100.50", "30"));
+		ecritureUnderTest.setLibelle("Débit");
+    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(1, null, "19.55"));
+    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(1, "100.50", "30"));
     	
     	// act
-    	BigDecimal actualResult = ecritueUnderTest.getTotalCredit();
+    	BigDecimal actualResult = ecritureUnderTest.getTotalCredit();
     	
     	// assert
     	assertThat(actualResult).isEqualTo(new BigDecimal(49.55, new MathContext(4)));
@@ -67,14 +67,14 @@ public class EcritureComptableTest
     public void isEquilibree_doitEtreEquilibree()
     {
     	// arrange  
-    	ecritueUnderTest.setLibelle("Equilibrée");
-    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, "200.50", null));
-    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, "100.50", "33"));
-    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(2, null, "301"));
-    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(2, "40", "7"));
+    	ecritureUnderTest.setLibelle("Equilibrée");
+    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(1, "200.50", null));
+    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(1, "100.50", "33"));
+    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(2, null, "301"));
+    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(2, "40", "7"));
         
         // act
-        boolean actualResult = ecritueUnderTest.isEquilibree();
+        boolean actualResult = ecritureUnderTest.isEquilibree();
         
         // assert
         assertThat(actualResult).isTrue();
@@ -84,14 +84,14 @@ public class EcritureComptableTest
     public void isEquilibree_neDoitPasEtreEquilibree()
     {
     	// arrange
-    	ecritueUnderTest.setLibelle("Non équilibrée");
-    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, "10", null));
-    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(1, "20", "1"));
-    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(2, null, "30"));
-    	ecritueUnderTest.getListLigneEcriture().add(this.createLigne(2, "1", "2"));
+    	ecritureUnderTest.setLibelle("Non équilibrée");
+    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(1, "10", null));
+    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(1, "20", "1"));
+    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(2, null, "30"));
+    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(2, "1", "2"));
         
         // act
-        boolean actualResult = ecritueUnderTest.isEquilibree();
+        boolean actualResult = ecritureUnderTest.isEquilibree();
         
         // assert
         assertThat(actualResult).isFalse();
