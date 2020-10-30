@@ -59,6 +59,19 @@ public class EcritureComptableTest
 	}
 	
 	@Test
+    void getTotalDebit_NeContientPasAuMoinsDeuxLignes()
+    void getTotalDebit_AvecUneSeuleLigne()
+    {
+    	// arrange
+		ecritureUnderTest.setLibelle("Débit");
+    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(1, "200.55", null));
+    	
+    	// act
+    	assertThatIllegalStateException().isThrownBy(() -> {ecritureUnderTest.getTotalDebit();}).
+    		withMessage("Une écriture comptable doit avoir au moins 2 lignes d'ecriture");
+    }
+	
+	@Test
 	void getTotalCredit_sommeDeuxLignes_retourneTotalCredit()
 	{
 		// arrange

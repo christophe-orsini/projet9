@@ -82,6 +82,7 @@ public class EcritureComptable {
      */
     // TODO à tester
     public BigDecimal getTotalDebit() {
+    	if (listLigneEcriture.size() < 2) throw new IllegalStateException("Une écriture comptable doit avoir au moins 2 lignes d'ecriture");
         BigDecimal vRetour = BigDecimal.ZERO;
         for (LigneEcritureComptable vLigneEcritureComptable : listLigneEcriture) {
             if (vLigneEcritureComptable.getDebit() != null) {
