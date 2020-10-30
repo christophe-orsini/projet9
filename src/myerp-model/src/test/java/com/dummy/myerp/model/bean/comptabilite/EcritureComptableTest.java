@@ -65,7 +65,7 @@ public class EcritureComptableTest
 		ecritureUnderTest.setLibelle("Débit");
     	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(1, "200.55", null));
     	
-    	// act
+    	// assert
     	assertThatIllegalStateException().isThrownBy(() -> {ecritureUnderTest.getTotalDebit();}).
     		withMessage("Une écriture comptable doit avoir au moins 2 lignes d'ecriture");
     }
@@ -92,7 +92,7 @@ public class EcritureComptableTest
 		ecritureUnderTest.setLibelle("Crédit");
     	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(1, null, "19.55"));
     	
-    	// act
+    	// assert
     	assertThatIllegalStateException().isThrownBy(() -> {ecritureUnderTest.getTotalCredit();}).
     		withMessage("Une écriture comptable doit avoir au moins 2 lignes d'ecriture");
     }
