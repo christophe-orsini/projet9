@@ -59,7 +59,6 @@ public class EcritureComptableTest
 	}
 	
 	@Test
-    void getTotalDebit_NeContientPasAuMoinsDeuxLignes()
     void getTotalDebit_AvecUneSeuleLigne()
     {
     	// arrange
@@ -86,7 +85,18 @@ public class EcritureComptableTest
     	assertThat(actualResult).isEqualByComparingTo(new BigDecimal("49.55"));
 	}
 	
-   
+	@Test
+    void getTotalCreditDebit_AvecUneSeuleLigne()
+    {
+    	// arrange
+		ecritureUnderTest.setLibelle("Crédit");
+    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(1, null, "19.55"));
+    	
+    	// act
+    	assertThatIllegalStateException().isThrownBy(() -> {ecritureUnderTest.getTotalCredit();}).
+    		withMessage("Une écriture comptable doit avoir au moins 2 lignes d'ecriture");
+    }
+	
     @Test
     public void isEquilibree_doitEtreEquilibree()
     {
