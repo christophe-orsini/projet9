@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 //import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.jupiter.api.Test;
@@ -29,7 +28,7 @@ public class EcritureComptableTest
 	}
 	
 	@Test
-	void getTotalDebit_sommeDeDeuxLignes()
+	void getTotalDebit_sommeDeuxLignes_retourneTotalDebit()
 	{
 		// arrange
 		ecritureUnderTest.setLibelle("Débit");
@@ -40,11 +39,11 @@ public class EcritureComptableTest
     	BigDecimal actualResult = ecritureUnderTest.getTotalDebit();
     	
     	// assert
-    	assertThat(actualResult).isEqualTo(new BigDecimal(301.05, new MathContext(5)));
+    	assertThat(actualResult).isEqualByComparingTo(new BigDecimal("301.05"));
 	}
 	
 	@Test
-	void getTotalCredit_sommeDeDeuxLignes()
+	void getTotalCredit_sommeDeuxLignes_retourneTotalCredit()
 	{
 		// arrange
 		ecritureUnderTest.setLibelle("Débit");
@@ -55,7 +54,7 @@ public class EcritureComptableTest
     	BigDecimal actualResult = ecritureUnderTest.getTotalCredit();
     	
     	// assert
-    	assertThat(actualResult).isEqualTo(new BigDecimal(49.55, new MathContext(4)));
+    	assertThat(actualResult).isEqualByComparingTo(new BigDecimal("49.55"));
 	}
 	
     /*
@@ -101,6 +100,7 @@ public class EcritureComptableTest
      * RG_Compta_3
      * Une écriture comptable doit contenir au moins deux lignes d'écriture : une au débit et une au crédit
      */
+    
     
     /*
      * RG_Compta_5
