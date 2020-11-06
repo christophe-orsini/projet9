@@ -2,6 +2,8 @@ package com.dummy.myerp.model.bean.comptabilite;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import org.junit.jupiter.api.Test;
 
 class LigneEcritureComptableTest
@@ -58,7 +60,7 @@ class LigneEcritureComptableTest
 		BigDecimal actualResult = ligneEcriture.getDebit();
 		
 		// assert
-		assertThat(actualResult).isEqualTo(BigDecimal.ZERO);
+		assertThat(actualResult).isEqualTo(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP));
 	}
 	
 	@Test
@@ -126,7 +128,7 @@ class LigneEcritureComptableTest
 		BigDecimal actualResult = ligneEcriture.getCredit();
 		
 		// assert
-		assertThat(actualResult).isEqualTo(BigDecimal.ZERO);
+		assertThat(actualResult).isEqualTo(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP));
 	}
 	
 	@Test
@@ -150,5 +152,37 @@ class LigneEcritureComptableTest
 	 * RG_Compta_7
 	 * Les montants des lignes d'écritures peuvent comporter 2 chiffres maximum après la virgule
 	 */
+	@Test
+	void getDebit_Precision3_ShouldReturn2()
+	{
+		// arrange
+		LigneEcritureComptable ligneEcriture = new LigneEcritureComptable(
+				new CompteComptable(),
+				"Débit Scale 3",
+				new BigDecimal("123.456"),
+				null);
+		
+		// act
+		BigDecimal actualResult = ligneEcriture.getDebit();
+		
+		// assert
+		assertThat(actualResult.scale()).isEqualTo(2);
+	}
 	
+	@Test
+	void getCredit_Precision3_ShouldReturn2()
+	{
+		// arrange
+		LigneEcritureComptable ligneEcriture = new LigneEcritureComptable(
+				new CompteComptable(),
+				"Crédit Scale 3",
+				null,
+				new BigDecimal("123.456"));
+		
+		// act
+		BigDecimal actualResult = ligneEcriture.getCredit();
+		
+		// assert
+		assertThat(actualResult.scale()).isEqualTo(2);	
+	}
 }
