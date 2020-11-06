@@ -1,6 +1,5 @@
 package com.dummy.myerp.model.bean.comptabilite;
 
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,9 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 import org.apache.commons.lang3.StringUtils;
-
 
 /**
  * Bean représentant une Écriture Comptable
@@ -80,10 +77,8 @@ public class EcritureComptable {
      *
      * @return {@link BigDecimal}, {@link BigDecimal#ZERO} si aucun montant au débit
      */
-    // TODO à tester
+    // TODO à tester OK
     public BigDecimal getTotalDebit() {
-    	if (listLigneEcriture.size() < 2) throw new IllegalStateException("Une écriture comptable doit avoir au moins 2 lignes d'ecriture");
-    	
         BigDecimal vRetour = BigDecimal.ZERO;
         for (LigneEcritureComptable vLigneEcritureComptable : listLigneEcriture) {
             if (vLigneEcritureComptable.getDebit() != null) {
@@ -99,8 +94,6 @@ public class EcritureComptable {
      * @return {@link BigDecimal}, {@link BigDecimal#ZERO} si aucun montant au crédit
      */
     public BigDecimal getTotalCredit() {
-    	if (listLigneEcriture.size() < 2) throw new IllegalStateException("Une écriture comptable doit avoir au moins 2 lignes d'ecriture");
-    	
         BigDecimal vRetour = BigDecimal.ZERO;
         for (LigneEcritureComptable vLigneEcritureComptable : listLigneEcriture) {
             if (vLigneEcritureComptable.getCredit() != null) {

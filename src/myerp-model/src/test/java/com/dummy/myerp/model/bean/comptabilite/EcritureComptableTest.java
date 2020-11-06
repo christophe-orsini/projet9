@@ -25,7 +25,7 @@ public class EcritureComptableTest
 	}
 	
 	@Test
-	void getTotalDebit_sommeDeuxLignes_retourneTotalDebit()
+	void getTotalDebit_ShouldReturnTotalDebit()
 	{
 		// arrange
 		ecritureUnderTest.setLibelle("Débit");
@@ -40,19 +40,7 @@ public class EcritureComptableTest
 	}
 	
 	@Test
-    void getTotalDebit_AvecUneSeuleLigne()
-    {
-    	// arrange
-		ecritureUnderTest.setLibelle("Débit");
-    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(1, "200.55", null));
-    	
-    	// assert
-    	assertThatIllegalStateException().isThrownBy(() -> {ecritureUnderTest.getTotalDebit();}).
-    		withMessage("Une écriture comptable doit avoir au moins 2 lignes d'ecriture");
-    }
-	
-	@Test
-	void getTotalCredit_sommeDeuxLignes_retourneTotalCredit()
+	void getTotalCredit_ShouldReturnTotalCredit()
 	{
 		// arrange
 		ecritureUnderTest.setLibelle("Débit");
@@ -66,20 +54,8 @@ public class EcritureComptableTest
     	assertThat(actualResult).isEqualByComparingTo(new BigDecimal("49.55"));
 	}
 	
-	@Test
-    void getTotalCreditDebit_AvecUneSeuleLigne()
-    {
-    	// arrange
-		ecritureUnderTest.setLibelle("Crédit");
-    	ecritureUnderTest.getListLigneEcriture().add(this.createLigne(1, null, "19.55"));
-    	
-    	// assert
-    	assertThatIllegalStateException().isThrownBy(() -> {ecritureUnderTest.getTotalCredit();}).
-    		withMessage("Une écriture comptable doit avoir au moins 2 lignes d'ecriture");
-    }
-	
     @Test
-    public void isEquilibree_doitEtreEquilibree()
+    public void isEquilibree_ShouldBeEquilibree()
     {
     	// arrange  
     	ecritureUnderTest.setLibelle("Equilibrée");
@@ -96,7 +72,7 @@ public class EcritureComptableTest
     }
     
     @Test
-    public void isEquilibree_neDoitPasEtreEquilibree()
+    public void isEquilibree_ShouldNotBeEquilibree()
     {
     	// arrange
     	ecritureUnderTest.setLibelle("Non équilibrée");
@@ -111,8 +87,6 @@ public class EcritureComptableTest
         // assert
         assertThat(actualResult).isFalse();
     }
-    
-    
     
     //************************* Methods
     private LigneEcritureComptable createLigne(Integer pCompteComptableNumero, String pDebit, String pCredit)
