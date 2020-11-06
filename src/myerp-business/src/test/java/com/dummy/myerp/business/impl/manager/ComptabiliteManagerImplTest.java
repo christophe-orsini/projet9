@@ -29,23 +29,25 @@ public class ComptabiliteManagerImplTest
 	}
 	
     @Test
-    public void checkEcritureComptableUnit() throws Exception {
+    public void checkEcritureComptableUnit_ShouldNotRaiseException() throws Exception
+    {
+    	// arrange
         EcritureComptable vEcritureComptable;
         vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                                                                                 null, new BigDecimal(123),
-                                                                                 null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
-                                                                                 null, null,
-                                                                                 new BigDecimal(123)));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1), null,
+        		new BigDecimal(123), null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),null,
+        		null, new BigDecimal(123)));
+        
+        // act
         managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);
     }
 
     @Test
-    public void checkEcritureComptableUnitViolation() throws Exception
+    public void checkEcritureComptableUnit_ConstraintViolation() throws Exception
     {
     	// arrange
         EcritureComptable vEcritureComptable;
@@ -59,7 +61,7 @@ public class ComptabiliteManagerImplTest
     }
 
     @Test
-    public void checkEcritureComptableUnitRG2() throws Exception
+    public void checkEcritureComptableUnit_IsNotEquilibree_RG2() throws Exception
     {
     	// arrange
         EcritureComptable vEcritureComptable;
@@ -67,12 +69,11 @@ public class ComptabiliteManagerImplTest
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                                                                                 null, new BigDecimal(123),
-                                                                                 null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),
-                                                                                 null, null,
-                                                                                 new BigDecimal(1234)));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1), null,
+        		new BigDecimal(123), null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2), null,
+        		null, new BigDecimal(1234)));
+        
         // assert
         assertThatExceptionOfType(FunctionalException.class).isThrownBy(() ->
         {
@@ -81,7 +82,7 @@ public class ComptabiliteManagerImplTest
     }
 
     @Test
-    public void checkEcritureComptableUnitRG3() throws Exception
+    public void checkEcritureComptableUnit_Only1Line_RG3() throws Exception
     {
     	// arrange
         EcritureComptable vEcritureComptable;
@@ -89,16 +90,55 @@ public class ComptabiliteManagerImplTest
         vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
         vEcritureComptable.setDate(new Date());
         vEcritureComptable.setLibelle("Libelle");
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                                                                                 null, new BigDecimal(123),
-                                                                                 null));
-        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),
-                                                                                 null, new BigDecimal(123),
-                                                                                 null));
-     // assert
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),null,
+        		new BigDecimal(123),new BigDecimal(123)));
+        
+        // assert
         assertThatExceptionOfType(FunctionalException.class).isThrownBy(() ->
         {
         	managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);
-        }).withMessage("L'écriture comptable n'est pas équilibrée.");
+        }).withMessage("L'écriture comptable ne respecte pas les règles de gestion.");
+    }
+    
+    @Test
+    public void checkEcritureComptableUnit_OnlyDebit_RG3() throws Exception
+    {
+    	// arrange
+        EcritureComptable vEcritureComptable;
+        vEcritureComptable = new EcritureComptable();
+        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        vEcritureComptable.setDate(new Date());
+        vEcritureComptable.setLibelle("Libelle");
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1),null,
+        		new BigDecimal(123),null));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1), null,
+        		new BigDecimal(456), null));
+        
+        // assert
+        assertThatExceptionOfType(FunctionalException.class).isThrownBy(() ->
+        {
+        	managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);
+        }).withMessage("L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
+    }
+    
+    @Test
+    public void checkEcritureComptableUnit_OnlyCredit_RG3() throws Exception
+    {
+    	// arrange
+        EcritureComptable vEcritureComptable;
+        vEcritureComptable = new EcritureComptable();
+        vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+        vEcritureComptable.setDate(new Date());
+        vEcritureComptable.setLibelle("Libelle");
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1), null,
+        		null, new BigDecimal(123)));
+        vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1), null,
+                null, new BigDecimal(456)));
+        
+        // assert
+        assertThatExceptionOfType(FunctionalException.class).isThrownBy(() ->
+        {
+        	managerUnderTest.checkEcritureComptableUnit(vEcritureComptable);
+        }).withMessage("L'écriture comptable doit avoir au moins deux lignes : une ligne au débit et une ligne au crédit.");
     }
 }
