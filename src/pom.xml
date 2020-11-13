@@ -407,7 +407,7 @@
 				<version>0.8.6</version>
 				<configuration>
                     <excludes>
-                        <exclude>**/src/test/java</exclude>
+                        <exclude></exclude>
                     </excludes>
                 </configuration>
 				<executions>
