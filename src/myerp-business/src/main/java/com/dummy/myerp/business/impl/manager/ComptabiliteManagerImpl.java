@@ -1,11 +1,11 @@
 package com.dummy.myerp.business.impl.manager;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.TransactionStatus;
@@ -129,6 +129,25 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
         
         // TODO ===== RG_Compta_5 : Format et contenu de la référence
         // vérifier que l'année dans la référence correspond bien à la date de l'écriture, idem pour le code journal...
+        String reference;
+        if ((reference = pEcritureComptable.getReference()) != null)
+        {
+	        // Format reference = X[XXXX]-AAAA/99999
+	        String anneeReference = reference.substring(reference.indexOf('-') + 1, reference.indexOf('-') + 5);
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.setTime(pEcritureComptable.getDate());
+	        String annee = String.valueOf(calendar.get(Calendar.YEAR));
+	        if (!anneeReference.equals(annee))
+	        {
+	        	throw new FunctionalException("L'année de la référence ne correspond pas à la date de l'écriture comptable.");	
+	        }
+	        
+	        String codeJournal = reference.substring(0,  reference.indexOf('-'));
+	        if (!codeJournal.equals(pEcritureComptable.getJournal().getCode()))
+	        {
+	        	throw new FunctionalException("Le code du journal de la référence ne correspond pas au journal l'écriture comptable.");	
+	        } 
+        }  
     }
 
 
