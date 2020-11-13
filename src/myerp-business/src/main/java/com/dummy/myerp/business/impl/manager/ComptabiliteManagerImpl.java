@@ -166,11 +166,10 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
                 EcritureComptable vECRef = getDaoProxy().getComptabiliteDao().getEcritureComptableByRef(
                     pEcritureComptable.getReference());
 
-                // Si l'écriture à vérifier est une nouvelle écriture (id == null),
-                // ou si elle ne correspond pas à l'écriture trouvée (id != idECRef),
+                // Si l'écriture à vérifier n'est est pas  une nouvelle écriture (id != null),
+                // et si elle correspond à l'écriture trouvée (id == idECRef),
                 // c'est qu'il y a déjà une autre écriture avec la même référence
-                if (pEcritureComptable.getId() == null
-                    || !pEcritureComptable.getId().equals(vECRef.getId())) {
+                if (pEcritureComptable.getId() != null && pEcritureComptable.getId().equals(vECRef.getId())) {
                     throw new FunctionalException("Une autre écriture comptable existe déjà avec la même référence.");
                 }
             } catch (NotFoundException vEx) {
