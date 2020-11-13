@@ -2,6 +2,10 @@ package com.dummy.myerp.business.impl.manager;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +17,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
 import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
+import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
+import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
+import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
 
@@ -29,7 +36,7 @@ class ComptabiliteManagerCheckEcitureComptableContext
 	@BeforeEach
 	void setUp() throws Exception
 	{
-    	managerUnderTest = new ComptabiliteManagerImpl();
+    	managerUnderTest = Mockito.spy(new ComptabiliteManagerImpl());
     	managerUnderTest.configure(null, daoProxyMock, null);
 	}
 	
@@ -118,5 +125,32 @@ class ComptabiliteManagerCheckEcitureComptableContext
         
 		// assert
 		Mockito.verify(ecritureComptableMock).getId();
+	}
+	
+	@Test
+	public void checkEcritureComptable_ShouldCall2Methods() throws Exception
+	{
+		// arrange
+		Mockito.when(daoProxyMock.getComptabiliteDao()).thenReturn(comptabiliteDaoMock);
+		Mockito.when(comptabiliteDaoMock.getEcritureComptableByRef(Mockito.anyString())).thenReturn(ecritureComptableMock);
+		Mockito.when(ecritureComptableMock.getId()).thenReturn(20);
+		
+		EcritureComptable vEcritureComptable = Mockito.spy(new EcritureComptable());
+		vEcritureComptable.setId(10);
+		vEcritureComptable.setJournal(new JournalComptable("AC", "Achat"));
+		vEcritureComptable.setDate(new Date());
+		vEcritureComptable.setLibelle("Libelle");
+		Calendar calendar = Calendar.getInstance();
+		String annee = String.valueOf(calendar.get(Calendar.YEAR));
+		vEcritureComptable.setReference("AC-" + annee + "/00001");
+		vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(1), null, new BigDecimal(123), null));
+		vEcritureComptable.getListLigneEcriture().add(new LigneEcritureComptable(new CompteComptable(2),null, null, new BigDecimal(123)));
+		
+		// act
+		managerUnderTest.checkEcritureComptable(vEcritureComptable);
+		
+		// assert
+		Mockito.verify(managerUnderTest).checkEcritureComptableUnit(Mockito.any(EcritureComptable.class));
+		Mockito.verify(managerUnderTest).checkEcritureComptableContext(Mockito.any(EcritureComptable.class));
 	}
 }
