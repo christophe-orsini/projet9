@@ -1,7 +1,6 @@
 package com.dummy.myerp.model.bean.comptabilite;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import java.math.BigDecimal;
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.jupiter.api.Test;
