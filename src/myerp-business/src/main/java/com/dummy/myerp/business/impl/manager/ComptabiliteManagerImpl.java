@@ -9,12 +9,14 @@ import javax.validation.ConstraintViolationException;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.TransactionStatus;
+
 import com.dummy.myerp.business.contrat.manager.ComptabiliteManager;
 import com.dummy.myerp.business.impl.AbstractBusinessManager;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
+import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
 
@@ -58,10 +60,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     /**
      * {@inheritDoc}
      */
-    // TODO à tester
     @Override
     public synchronized void addReference(EcritureComptable pEcritureComptable) {
-        // TODO à implémenter
         // Bien se réferer à la JavaDoc de cette méthode !
         /* Le principe :
                 1.  Remonter depuis la persitance la dernière valeur de la séquence du journal pour l'année de l'écriture
@@ -74,18 +74,47 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
                 4.  Enregistrer (insert/update) la valeur de la séquence en persitance
                     (table sequence_ecriture_comptable)
          */
+    	if (StringUtils.isNoneEmpty(pEcritureComptable.getReference())) return; // La référence existe déjà
+    	   	
+    	// année de l'écriture
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(pEcritureComptable.getDate());
+		int annee = calendar.get(Calendar.YEAR);
+		
+    	// Remonte la dernière valeur de la séquence du journal pour l'année de l'écriture
+		SequenceEcritureComptable derniereSequence;
+		try
+		{
+			 derniereSequence = getDaoProxy().getComptabiliteDao().getSequenceEcritureComptableByJournalAnnee(
+					 pEcritureComptable.getJournal().getCode(), annee);	
+		} 
+		catch (NotFoundException e)
+		{
+			// première séquence
+			derniereSequence = new SequenceEcritureComptable(pEcritureComptable.getJournal().getCode(), annee, 0);
+		}
+    	
+    	derniereSequence.setDerniereValeur(derniereSequence.getDerniereValeur() + 1);
+    	
+    	pEcritureComptable.setReference(
+    					pEcritureComptable.getJournal().getCode() + 
+    					"-" +
+    					annee + 
+    					"/" + 
+    					String.format("%05d", derniereSequence.getDerniereValeur()));
+    	
+    	// sauvegarde derniereSequence
+    	getDaoProxy().getComptabiliteDao().updateSequenceEcritureComptable(derniereSequence);	
     }
 
     /**
      * {@inheritDoc}
      */
-    // TODO à tester
     @Override
     public void checkEcritureComptable(EcritureComptable pEcritureComptable) throws FunctionalException {
         this.checkEcritureComptableUnit(pEcritureComptable);
         this.checkEcritureComptableContext(pEcritureComptable);
     }
-
 
     /**
      * Vérifie que l'Ecriture comptable respecte les règles de gestion unitaires,
@@ -94,7 +123,6 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
      * @param pEcritureComptable -
      * @throws FunctionalException Si l'Ecriture comptable ne respecte pas les règles de gestion
      */
-    // TODO tests à compléter
     protected void checkEcritureComptableUnit(EcritureComptable pEcritureComptable) throws FunctionalException {    
         // ===== Vérification des contraintes unitaires sur les attributs de l'écriture
         Set<ConstraintViolation<EcritureComptable>> vViolations = getConstraintValidator().validate(pEcritureComptable);
@@ -127,7 +155,7 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
             throw new FunctionalException("L'écriture comptable n'est pas équilibrée.");
         }
         
-        // TODO ===== RG_Compta_5 : Format et contenu de la référence
+        // ===== RG_Compta_5 : Format et contenu de la référence
         // vérifier que l'année dans la référence correspond bien à la date de l'écriture, idem pour le code journal...
         String reference;
         if ((reference = pEcritureComptable.getReference()) != null)
