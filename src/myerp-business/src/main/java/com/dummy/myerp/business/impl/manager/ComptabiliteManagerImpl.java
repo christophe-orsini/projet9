@@ -16,6 +16,7 @@ import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
 import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
+import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
 
@@ -59,10 +60,8 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
     /**
      * {@inheritDoc}
      */
-    // TODO à tester
     @Override
     public synchronized void addReference(EcritureComptable pEcritureComptable) {
-        // TODO à implémenter
         // Bien se réferer à la JavaDoc de cette méthode !
         /* Le principe :
                 1.  Remonter depuis la persitance la dernière valeur de la séquence du journal pour l'année de l'écriture
@@ -75,6 +74,37 @@ public class ComptabiliteManagerImpl extends AbstractBusinessManager implements 
                 4.  Enregistrer (insert/update) la valeur de la séquence en persitance
                     (table sequence_ecriture_comptable)
          */
+    	if (StringUtils.isNoneEmpty(pEcritureComptable.getReference())) return; // La référence existe déjà
+    	   	
+    	// année de l'écriture
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(pEcritureComptable.getDate());
+		int annee = calendar.get(Calendar.YEAR);
+		
+    	// Remonte la dernière valeur de la séquence du journal pour l'année de l'écriture
+		SequenceEcritureComptable derniereSequence;
+		try
+		{
+			 derniereSequence = getDaoProxy().getComptabiliteDao().getSequenceEcritureComptableByJournalAnnee(
+					 pEcritureComptable.getJournal().getCode(), annee);	
+		} 
+		catch (NotFoundException e)
+		{
+			// première séquence
+			derniereSequence = new SequenceEcritureComptable(pEcritureComptable.getJournal().getCode(), annee, 0);
+		}
+    	
+    	derniereSequence.setDerniereValeur(derniereSequence.getDerniereValeur() + 1);
+    	
+    	pEcritureComptable.setReference(
+    					pEcritureComptable.getJournal().getCode() + 
+    					"-" +
+    					annee + 
+    					"/" + 
+    					String.format("%05d", derniereSequence.getDerniereValeur()));
+    	
+    	// sauvegarde derniereSequence
+    	getDaoProxy().getComptabiliteDao().updateSequenceEcritureComptable(derniereSequence);	
     }
 
     /**
