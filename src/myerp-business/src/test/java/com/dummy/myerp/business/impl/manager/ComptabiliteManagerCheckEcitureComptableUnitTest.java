@@ -17,7 +17,7 @@ import com.dummy.myerp.model.bean.comptabilite.LigneEcritureComptable;
 import com.dummy.myerp.technical.exception.FunctionalException;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-public class ComptabiliteManagerCheckEcitureComptableUnit
+public class ComptabiliteManagerCheckEcitureComptableUnitTest
 {
     private ComptabiliteManagerImpl managerUnderTest;
 
