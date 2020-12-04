@@ -94,6 +94,23 @@
 		<profile>
 			<id>test-consumer</id>
 		</profile>
+		
+	    <!-- tests unitaires -->
+		<profile>
+			<id>tests-UT</id>
+			<properties>
+				<skip.unit.tests>false</skip.unit.tests>
+				<skip.integration.tests>true</skip.integration.tests>
+			</properties>
+		</profile>
+		<!-- tests intégration -->
+		<profile>
+		    <id>tests-IT</id>
+		    <properties>
+	            <skip.unit.tests>true</skip.unit.tests>
+				<skip.integration.tests>false</skip.integration.tests>
+	        </properties>
+		</profile>
 	</profiles>
 
 
@@ -349,12 +366,13 @@
 				</plugin>
 
 				<!-- ===== Test / Reporting ===== -->
+				<!-- voir Profiles -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.22.2</version>
 					<configuration>
-						<skipTests>true</skipTests>
+						<skipTests>${skip.unit.tests}</skipTests>
 					</configuration>
 					<executions>
 						<execution>
@@ -364,32 +382,29 @@
 								<goal>test</goal>
 							</goals>
 							<configuration>
-								<skipTests>false</skipTests>
+								<skipTests>${skip.unit.tests}</skipTests>
 								<includes>
 									<include>**/*Test.java</include>
 								</includes>
+								<excludes>
+									<excude>**/*_ITest.java</excude>
+								</excludes>
 							</configuration>
 						</execution>
 						<execution>
 							<id>integration-tests</id>
-							<phase>integration-test</phase>
+							<phase>verify</phase>
 							<goals>
 								<goal>test</goal>
 							</goals>
 							<configuration>
-								<skipTests>false</skipTests>
+								<skipTests>${skip.integration.tests}</skipTests>
 								<includes>
-									<include>**/*IT.java</include>
+									<include>**/*_ITest.java</include>
 								</includes>
 							</configuration>
 						</execution>
 					</executions>
-				</plugin>
-
-				<plugin>
-				    <groupId>org.apache.maven.plugins</groupId>
-				    <artifactId>maven-failsafe-plugin</artifactId>
-				    <version>3.0.0-M5</version>
 				</plugin>
 
 				<!-- ===== Plugin d'analyse de code Checkstyle ===== -->
@@ -470,7 +485,7 @@
 						</execution>
 						<execution>
 							<id>report-integration</id>
-							<phase>test</phase>
+							<phase>verify</phase>
 							<goals>
 								<goal>report-integration</goal>
 							</goals>
