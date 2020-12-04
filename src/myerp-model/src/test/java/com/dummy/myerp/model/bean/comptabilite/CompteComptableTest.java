@@ -77,4 +77,21 @@ class CompteComptableTest
 		// assert
 		assertThat(actualResult).isNull();
 	}
+	
+	@Test
+	void toString_ShouldReturnString()
+	{
+		// arrange
+		CompteComptable compteUnderTest = new CompteComptable();
+		compteUnderTest.setNumero(9);
+		compteUnderTest.setLibelle("Libellé");
+		
+		String expected = "CompteComptable{numero=9, libelle='Libellé'}";
+		
+		// act
+		String actual = compteUnderTest.toString();
+		
+		// assert
+		assertThat(actual).isEqualTo(expected);
+	}
 }

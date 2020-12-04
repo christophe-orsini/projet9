@@ -87,6 +87,23 @@ public class EcritureComptableTest
         assertThat(actualResult).isFalse();
     }
     
+    @Test
+	void toString_ShouldReturnString()
+	{
+		// arrange
+    	ecritureUnderTest.setId(9);
+    	ecritureUnderTest.setId(9);
+    	ecritureUnderTest.setLibelle("libelle");
+		String expected = "EcritureComptable{id=9, journal=null, reference='null', date=null, libelle='libelle',"
+				+ " totalDebit=0, totalCredit=0, listLigneEcriture=[\n\n]}";
+		
+		// act
+		String actual = ecritureUnderTest.toString();
+		
+		// assert
+		assertThat(actual).isEqualTo(expected);
+	}
+    
     //************************* Methods
     private LigneEcritureComptable createLigne(Integer pCompteComptableNumero, String pDebit, String pCredit)
     {

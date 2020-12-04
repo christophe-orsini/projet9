@@ -77,4 +77,20 @@ class JournalComptableTest
 		// assert
 		assertThat(actualResult).isNull();
 	}
+	
+	@Test
+	void toString_ShouldReturnString()
+	{
+		// arrange
+		JournalComptable journalUnderTest = new JournalComptable();
+		journalUnderTest.setCode("BQ");
+		journalUnderTest.setLibelle("Banque");
+		String expected = "JournalComptable{code='BQ', libelle='Banque'}";
+		
+		// act
+		String actual = journalUnderTest.toString();
+		
+		// assert
+		assertThat(actual).isEqualTo(expected);
+	}	
 }

@@ -185,4 +185,19 @@ class LigneEcritureComptableTest
 		// assert
 		assertThat(actualResult.scale()).isEqualTo(2);	
 	}
+	
+	@Test
+	void toString_ShouldReturnString()
+	{
+		// arrange
+		LigneEcritureComptable ligneEcriture = new LigneEcritureComptable();
+		ligneEcriture.setLibelle("Ligne");
+		String expected = "LigneEcritureComptable{compteComptable=null, libelle='Ligne', debit=null, credit=null}";
+		
+		// act
+		String actual = ligneEcriture.toString();
+		
+		// assert
+		assertThat(actual).isEqualTo(expected);
+	}	
 }
