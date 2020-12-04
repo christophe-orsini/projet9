@@ -88,6 +88,11 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+						<excludes>
+							<exclude>**/com/dummy/myerp/model/bean/comptabilite/SequenceEcritureComptable.*</exclude>
+						</excludes>
+					</configuration>
 			</plugin>
 		</plugins>
 	</build>
