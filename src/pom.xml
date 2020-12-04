@@ -54,6 +54,12 @@
 		<!-- ===== Version properties ===== -->
 		<log4j.version>2.8.1</log4j.version>
 		<spring.version>4.3.7.RELEASE</spring.version>
+		
+		<!-- Tests and Coverage properties -->
+		<skip.unit.tests>false</skip.unit.tests>
+		<skip.integration.tests>false</skip.integration.tests>
+		<skip.UT.coverage>false</skip.UT.coverage>
+		<skip.IT.coverage>false</skip.IT.coverage>	
 	</properties>
 
 
@@ -101,6 +107,8 @@
 			<properties>
 				<skip.unit.tests>false</skip.unit.tests>
 				<skip.integration.tests>true</skip.integration.tests>
+				<skip.UT.coverage>false</skip.UT.coverage>
+				<skip.IT.coverage>true</skip.IT.coverage>	
 			</properties>
 		</profile>
 		<!-- tests intégration -->
@@ -109,6 +117,18 @@
 		    <properties>
 	            <skip.unit.tests>true</skip.unit.tests>
 				<skip.integration.tests>false</skip.integration.tests>
+				<skip.UT.coverage>true</skip.UT.coverage>
+				<skip.IT.coverage>false</skip.IT.coverage>	
+	        </properties>
+		</profile>
+		<!-- pas de tests -->
+		<profile>
+		    <id>ignore-tests</id>
+		    <properties>
+	            <skip.unit.tests>true</skip.unit.tests>
+				<skip.integration.tests>true</skip.integration.tests>
+				<skip.UT.coverage>true</skip.UT.coverage>
+				<skip.IT.coverage>true</skip.IT.coverage>	
 	        </properties>
 		</profile>
 	</profiles>
@@ -464,10 +484,30 @@
 							<exclude>**/com/dummy/myerp/business/impl/*.*</exclude>
 							<exclude>**/com/dummy/myerp/model/bean/comptabilite/SequenceEcritureComptable.java</exclude>
 						</excludes>
+						<rules>
+							<rule>
+								<element>BUNDLE</element>
+								<limits>
+									<limit>
+										<counter>INSTRUCTION</counter>
+										<value>COVEREDRATIO</value>
+										<minimum>0.75</minimum>
+									</limit>
+									<limit>
+										<counter>CLASS</counter>
+										<value>MISSEDCOUNT</value>
+										<maximum>0</maximum>
+									</limit>
+								</limits>
+							</rule>
+						</rules>
 					</configuration>
 					<executions>
 						<execution>
 							<id>prepare-agent</id>
+							<configuration>
+								<skip>${skip.UT.coverage}</skip>
+							</configuration>
 							<goals>
 								<goal>prepare-agent</goal>
 							</goals>
@@ -481,6 +521,9 @@
 						</execution>
 						<execution>
 							<id>prepare-agent-integration</id>
+							<configuration>
+								<skip>${skip.IT.coverage}</skip>
+							</configuration>
 							<goals>
 								<goal>prepare-agent-integration</goal>
 							</goals>
@@ -494,7 +537,6 @@
 						</execution>
 					</executions>
 				</plugin>
-		
 			</plugins>
 		</pluginManagement>
 	</build>
