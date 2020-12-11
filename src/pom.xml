@@ -104,32 +104,72 @@
 	    <!-- tests unitaires -->
 		<profile>
 			<id>tests-UT</id>
-			<properties>
-				<skip.unit.tests>false</skip.unit.tests>
-				<skip.integration.tests>true</skip.integration.tests>
-				<skip.UT.coverage>false</skip.UT.coverage>
-				<skip.IT.coverage>true</skip.IT.coverage>	
-			</properties>
+			<build>
+				<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.22.2</version>
+					<goals>
+						<goal>test</goal>
+					</goals>
+					<configuration>
+						<includes>
+							<include>**/*Test.java</include>
+						</includes>
+						<excludes>
+							<excude>**/it/*IT.java</excude>
+						</excludes>
+					</configuration>
+				</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<!-- tests intégration -->
 		<profile>
 		    <id>tests-IT</id>
-		    <properties>
-	            <skip.unit.tests>true</skip.unit.tests>
-				<skip.integration.tests>false</skip.integration.tests>
-				<skip.UT.coverage>true</skip.UT.coverage>
-				<skip.IT.coverage>false</skip.IT.coverage>	
-	        </properties>
+		    <build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.22.2</version>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+						<includes>
+								<include>**/it/*IT.java</include>
+							</includes>
+							<excludes>
+								<exclude>**/*Test.java</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
-		<!-- pas de tests -->
+		<!-- tous tests -->
 		<profile>
-		    <id>ignore-tests</id>
-		    <properties>
-	            <skip.unit.tests>true</skip.unit.tests>
-				<skip.integration.tests>true</skip.integration.tests>
-				<skip.UT.coverage>true</skip.UT.coverage>
-				<skip.IT.coverage>true</skip.IT.coverage>	
-	        </properties>
+		    <id>tests</id>
+		    <build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.22.2</version>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>**/*Test.java</include>
+								<include>**/it/*IT.java</include>
+							</includes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 
@@ -387,45 +427,7 @@
 
 				<!-- ===== Test / Reporting ===== -->
 				<!-- voir Profiles -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.22.2</version>
-					<configuration>
-						<skipTests>${skip.unit.tests}</skipTests>
-					</configuration>
-					<executions>
-						<execution>
-							<id>unit-tests</id>
-							<phase>test</phase>
-							<goals>
-								<goal>test</goal>
-							</goals>
-							<configuration>
-								<skipTests>${skip.unit.tests}</skipTests>
-								<includes>
-									<include>**/*Test.java</include>
-								</includes>
-								<excludes>
-									<excude>**/*_ITest.java</excude>
-								</excludes>
-							</configuration>
-						</execution>
-						<execution>
-							<id>integration-tests</id>
-							<phase>verify</phase>
-							<goals>
-								<goal>test</goal>
-							</goals>
-							<configuration>
-								<skipTests>${skip.integration.tests}</skipTests>
-								<includes>
-									<include>**/*_ITest.java</include>
-								</includes>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
+			
 
 				<!-- ===== Plugin d'analyse de code Checkstyle ===== -->
 				<plugin>
