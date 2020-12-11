@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.dummy.myerp.business.impl.AbstractBusinessManager;
 import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
 import com.dummy.myerp.consumer.dao.contrat.DaoProxy;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
@@ -37,7 +38,7 @@ class ComptabiliteManagerCheckEcitureComptableContextTest
 	void setUp() throws Exception
 	{
     	managerUnderTest = Mockito.spy(new ComptabiliteManagerImpl());
-    	managerUnderTest.configure(null, daoProxyMock, null);
+    	AbstractBusinessManager.configure(null, daoProxyMock, null);
 	}
 	
 	@AfterEach
