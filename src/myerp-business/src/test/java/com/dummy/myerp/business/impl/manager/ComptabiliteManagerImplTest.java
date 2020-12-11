@@ -22,7 +22,7 @@ import com.dummy.myerp.technical.exception.FunctionalException;
 import com.dummy.myerp.technical.exception.NotFoundException;
 
 @ExtendWith(MockitoExtension.class)
-class ComptabiliteManagerImpl_UTest
+class ComptabiliteManagerImplTest
 {
 	@Mock private EcritureComptable ecritureComptableMock;
 	@Mock private DaoProxy daoProxyMock;
