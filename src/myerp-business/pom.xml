@@ -105,9 +105,9 @@
         
         <!-- ===== JAXB for JAVA 11 ===== -->
         <dependency>
-			    <groupId>javax.xml.bind</groupId>
-			    <artifactId>jaxb-api</artifactId>
-			    </dependency>
+		    <groupId>javax.xml.bind</groupId>
+		    <artifactId>jaxb-api</artifactId>
+	    </dependency>
     </dependencies>
 
     <!-- =============================================================== -->
