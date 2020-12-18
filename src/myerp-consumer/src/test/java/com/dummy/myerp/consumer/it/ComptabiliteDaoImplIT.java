@@ -19,6 +19,7 @@ import com.dummy.myerp.consumer.dao.contrat.ComptabiliteDao;
 import com.dummy.myerp.model.bean.comptabilite.CompteComptable;
 import com.dummy.myerp.model.bean.comptabilite.EcritureComptable;
 import com.dummy.myerp.model.bean.comptabilite.JournalComptable;
+import com.dummy.myerp.model.bean.comptabilite.SequenceEcritureComptable;
 import com.dummy.myerp.technical.exception.NotFoundException;
 
 @ExtendWith(SpringExtension.class)
@@ -95,6 +96,27 @@ class ComptabiliteDaoImplIT
 	    assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> {
 	    	daoUnderTest.getEcritureComptableByRef("dummy");})
 	    	.withMessage("EcritureComptable non trouvée : reference=dummy");
+	}
+	
+	@Test
+	void getSequenceEcriture_ShouldReturn_SequenceEcritureComptable() throws NotFoundException
+	{
+		// arrange
+		
+		// act
+		SequenceEcritureComptable sequence = daoUnderTest.getSequenceEcritureComptableByJournalAnnee("BQ", 2016);
+		
+		// assert
+		assertThat(sequence.getAnnee()).isEqualTo(2016);
+	}
+	
+	@Test
+	void getSequenceEcriture_ShouldRaiseException()
+	{
+		// assert
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> {
+        	daoUnderTest.getSequenceEcritureComptableByJournalAnnee("BQ", 2130);})
+        	.withMessage("SequenceEcritureComptable non trouvée : codeJournal=BQ / annee=2130");
 	}
 	
 }

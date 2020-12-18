@@ -272,9 +272,9 @@ public class ComptabiliteDaoImpl extends AbstractDbConsumer implements Comptabil
     
     // ==================== SequenceEcritureComptable - GET ====================
     
-    /** SQLgetSequenceEcritureComptableByRef */
+    /** SQLgetSequenceEcritureComptableByJournalAnnee */
     private static String SQLgetSequenceEcritureComptableByJournalAnnee;
-    public void setSQLgetSequnceEcritureComptableByJournalAnneeRef(String pSQLgetSequenceEcritureComptableByJournalAnnee)
+    public void setSQLgetSequenceEcritureComptableByJournalAnnee(String pSQLgetSequenceEcritureComptableByJournalAnnee)
     {
     	SQLgetSequenceEcritureComptableByJournalAnnee = pSQLgetSequenceEcritureComptableByJournalAnnee;
     }
