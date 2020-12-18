@@ -25,22 +25,7 @@ import com.dummy.myerp.technical.exception.NotFoundException;
 class ComptabiliteDaoImplIT
 {
 	@Autowired ComptabiliteDao daoUnderTest;
-	EcritureComptable ecritureComptableExpected;
-	
-	@BeforeEach
-	void setUp()
-	{
-		ecritureComptableExpected = new EcritureComptable();
-		ecritureComptableExpected.setJournal(new JournalComptable("TT", "Test"));
-	}
-
-	@AfterEach
-	void tearDown()
-	{
-		ecritureComptableExpected = null;
-	}
-	
-	@Order(1)
+		
 	@Test
 	void getJournaux_ShouldReturn_ListeJournaux()
 	{
@@ -54,7 +39,6 @@ class ComptabiliteDaoImplIT
 		assertThat(journaux.contains(journal));
 	}
 
-	@Order(2)
 	@Test
 	void getComptes_ShouldReturn_ListeComptes()
 	{
@@ -66,12 +50,10 @@ class ComptabiliteDaoImplIT
 		
 		// assert
 		assertThat(comptes.contains(compte));
-		
 	}
 	
-	@Order(3)
 	@Test
-	void getEcritures_ShouldReturn_ListeEcrituress()
+	void getEcritures_ShouldReturn_ListeEcritures()
 	{
 		// arrange
 		
