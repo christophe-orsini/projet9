@@ -119,4 +119,21 @@ class ComptabiliteDaoImplIT
         	.withMessage("SequenceEcritureComptable non trouvée : codeJournal=BQ / annee=2130");
 	}
 	
+	@Test
+	void updateSequenceEcriture_ShouldUpdate() throws NotFoundException
+	{
+		// arrange
+		SequenceEcritureComptable sequence = daoUnderTest.getSequenceEcritureComptableByJournalAnnee("BQ", 2016);
+		int derniereValeur = sequence.getDerniereValeur();
+		derniereValeur++;
+		sequence.setDerniereValeur(derniereValeur);
+		
+		// act
+		daoUnderTest.updateSequenceEcritureComptable(sequence);
+		SequenceEcritureComptable actualSequence = daoUnderTest.getSequenceEcritureComptableByJournalAnnee("BQ", 2016);
+		
+		// assert
+		assertThat(actualSequence.getDerniereValeur()).isEqualTo(derniereValeur);
+	}
+	
 }
