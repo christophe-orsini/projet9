@@ -76,6 +76,7 @@ class ResultHelperTest
 		assertThat(actual).isEqualTo(null);	
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	void getDate_WhenGetColonne_ShouldReturnDate() throws SQLException
 	{
