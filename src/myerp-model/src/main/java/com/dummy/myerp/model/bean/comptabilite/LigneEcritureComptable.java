@@ -1,6 +1,8 @@
 package com.dummy.myerp.model.bean.comptabilite;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -34,8 +36,7 @@ public class LigneEcritureComptable {
     /**
      * Instantiates a new Ligne ecriture comptable.
      */
-    public LigneEcritureComptable() {
-    }
+    public LigneEcritureComptable() {}
 
     /**
      * Instantiates a new Ligne ecriture comptable.
@@ -68,13 +69,13 @@ public class LigneEcritureComptable {
         libelle = pLibelle;
     }
     public BigDecimal getDebit() {
-        return debit;
+        return debit != null ? debit.setScale(2, RoundingMode.HALF_UP) : null;
     }
     public void setDebit(BigDecimal pDebit) {
         debit = pDebit;
     }
     public BigDecimal getCredit() {
-        return credit;
+        return credit != null ? credit.setScale(2, RoundingMode.HALF_UP) : null;
     }
     public void setCredit(BigDecimal pCredit) {
         credit = pCredit;

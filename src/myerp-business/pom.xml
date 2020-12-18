@@ -53,6 +53,10 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>myerp-consumer</artifactId>
         </dependency>
+        <dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>myerp-technical</artifactId>
+		</dependency>
 
         <!-- ===== Spring JDBC/Tx ===== -->
         <!-- spring-tx : transaction, JCA, DAO -->
@@ -71,11 +75,20 @@
 
         <!-- ========== Test Dependencies ========== -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
-
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.assertj</groupId>
+		    <artifactId>assertj-core</artifactId>
+		    <scope>test</scope>
+		</dependency>
         <!-- ===== Database (pour les tests) ===== -->
         <!-- Pool de connexion -->
         <dependency>
@@ -89,8 +102,13 @@
             <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <!-- ===== JAXB for JAVA 11 ===== -->
+        <dependency>
+		    <groupId>javax.xml.bind</groupId>
+		    <artifactId>jaxb-api</artifactId>
+	    </dependency>
     </dependencies>
-
 
     <!-- =============================================================== -->
     <!-- Profiles -->
@@ -133,10 +151,15 @@
         </profile>
     </profiles>
 
-
     <!-- =============================================================== -->
     <!-- Build -->
     <!-- =============================================================== -->
     <build>
+    	<plugins>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
     </build>
 </project>
