@@ -1,6 +1,7 @@
 package com.dummy.myerp.consumer.it;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
@@ -63,4 +64,37 @@ class ComptabiliteDaoImplIT
 		// assert
 		assertThat(ecritures.size()>0);
 	}
+	
+	@Test
+	void getEcriture_ShouldReturn_EcritureComptable() throws NotFoundException
+	{
+		// arrange
+		
+		// act
+		EcritureComptable ecriture = daoUnderTest.getEcritureComptable(-1);
+		
+		// assert
+		assertThat(ecriture.getId()).isEqualTo(-1);
+		
+		// act
+		EcritureComptable otherEcriture = daoUnderTest.getEcritureComptableByRef(ecriture.getReference());
+				
+		// assert
+		assertThat(otherEcriture.getId()).isEqualTo(-1);
+	}
+	
+	@Test
+	void getEcriture_ShouldRaiseException()
+	{
+		// assert
+        assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> {
+        	daoUnderTest.getEcritureComptable(-10000);})
+        	.withMessage("EcritureComptable non trouvée : id=-10000");
+        
+	    // assert
+	    assertThatExceptionOfType(NotFoundException.class).isThrownBy(() -> {
+	    	daoUnderTest.getEcritureComptableByRef("dummy");})
+	    	.withMessage("EcritureComptable non trouvée : reference=dummy");
+	}
+	
 }
