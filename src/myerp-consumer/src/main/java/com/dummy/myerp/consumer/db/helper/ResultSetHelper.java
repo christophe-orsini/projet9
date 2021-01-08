@@ -59,7 +59,6 @@ public abstract class ResultSetHelper {
         return vRetour;
     }
 
-
     /**
      * Renvoie la valeur de la colonne pColName dans un {@link Date} en faisant un truncate de l'heure.
      * Si la colonne vaut <code>null</code>, la méthode renvoie <code>null</code>.
