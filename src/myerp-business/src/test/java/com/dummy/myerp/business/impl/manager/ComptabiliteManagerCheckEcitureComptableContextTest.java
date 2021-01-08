@@ -61,7 +61,7 @@ class ComptabiliteManagerCheckEcitureComptableContextTest
 	  }
 
 	@Test
-	public void checkEcritureComptableContext_ShouldNotRaiseNotFoundException() throws Exception
+	public void checkEcritureComptableContext_NotFound_ShouldNotRaiseNotFoundException() throws Exception
 	{
 		// arrange
 		Mockito.when(ecritureComptableMock.getReference()).thenReturn("BQ-2020/00001");
@@ -76,7 +76,7 @@ class ComptabiliteManagerCheckEcitureComptableContextTest
 	}
 	
 	@Test
-	public void checkEcritureComptableContext_WithNullId_ShouldNotRaiseException() throws Exception
+	public void checkEcritureComptableContext_WithNullId_ShouldRaiseException() throws Exception
 	{
 		// arrange
 		Mockito.when(ecritureComptableMock.getReference()).thenReturn("BQ-2020/00001");
@@ -84,15 +84,14 @@ class ComptabiliteManagerCheckEcitureComptableContextTest
 		Mockito.when(comptabiliteDaoMock.getEcritureComptableByRef(Mockito.anyString())).thenReturn(ecritureComptableMock);
 		Mockito.when(ecritureComptableMock.getId()).thenReturn(null);
 		 
-		// act
-		managerUnderTest.checkEcritureComptableContext(ecritureComptableMock);
-        
 		// assert
-		Mockito.verify(ecritureComptableMock).getId();
+        assertThatExceptionOfType(FunctionalException.class).isThrownBy(() -> {
+        	managerUnderTest.checkEcritureComptableContext(ecritureComptableMock);})
+        	.withMessage("Une autre écriture comptable existe déjà avec la même référence.");
 	}
 
 	@Test
-	public void checkEcritureComptableContext_WithSameId_ShouldRaiseException() throws Exception
+	public void checkEcritureComptableContext_WithNotSameId_ShouldRaiseException() throws Exception
 	{
 		// arrange
 		Mockito.when(daoProxyMock.getComptabiliteDao()).thenReturn(comptabiliteDaoMock);
@@ -100,7 +99,7 @@ class ComptabiliteManagerCheckEcitureComptableContextTest
 		Mockito.when(ecritureComptableMock.getId()).thenReturn(10);
 		 
 		EcritureComptable vEcritureComptable = new EcritureComptable();
-        vEcritureComptable.setId(10);
+        vEcritureComptable.setId(20);
         vEcritureComptable.setReference("Dummy");
 
 		// assert
@@ -115,7 +114,7 @@ class ComptabiliteManagerCheckEcitureComptableContextTest
 		// arrange
 		Mockito.when(daoProxyMock.getComptabiliteDao()).thenReturn(comptabiliteDaoMock);
 		Mockito.when(comptabiliteDaoMock.getEcritureComptableByRef(Mockito.anyString())).thenReturn(ecritureComptableMock);
-		Mockito.when(ecritureComptableMock.getId()).thenReturn(20);
+		Mockito.when(ecritureComptableMock.getId()).thenReturn(10);
 		 
 		EcritureComptable vEcritureComptable = new EcritureComptable();
         vEcritureComptable.setId(10);
@@ -134,7 +133,7 @@ class ComptabiliteManagerCheckEcitureComptableContextTest
 		// arrange
 		Mockito.when(daoProxyMock.getComptabiliteDao()).thenReturn(comptabiliteDaoMock);
 		Mockito.when(comptabiliteDaoMock.getEcritureComptableByRef(Mockito.anyString())).thenReturn(ecritureComptableMock);
-		Mockito.when(ecritureComptableMock.getId()).thenReturn(20);
+		Mockito.when(ecritureComptableMock.getId()).thenReturn(10);
 		
 		EcritureComptable vEcritureComptable = Mockito.spy(new EcritureComptable());
 		vEcritureComptable.setId(10);
