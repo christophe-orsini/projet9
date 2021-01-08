@@ -564,7 +564,6 @@
 						<excludes>
 							<exclude>**/com/dummy/myerp/technical/**</exclude>
 							<exclude>**/com/dummy/myerp/business/impl/*.*</exclude>
-							<exclude>**/com/dummy/myerp/model/bean/comptabilite/SequenceEcritureComptable.java</exclude>
 						</excludes>
 						<rules>
 							<rule>
